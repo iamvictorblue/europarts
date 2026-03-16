@@ -86,6 +86,7 @@ function buildInitialState(today) {
 function WorkOrderPage() {
   const today = new Date().toISOString().slice(0, 10)
   const initialState = buildInitialState(today)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [selectedServices, setSelectedServices] = useState(initialState.selectedServices)
   const [laborRows, setLaborRows] = useState(initialState.laborRows)
   const [partsRows, setPartsRows] = useState(initialState.partsRows)
@@ -166,23 +167,52 @@ function WorkOrderPage() {
     window.localStorage.removeItem(storageKey)
   }
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
   return (
     <div className="work-order-view">
       <header className="subpage-hero">
         <div className="page-shell nav-shell">
-          <nav className="nav-bar">
-            <a className="brand-lockup" href="/index.html" aria-label="Euro Parts Engineering">
-              <img src="/logo.png" alt="Euro Parts Engineering LLC" />
-            </a>
-            <div className="nav-links">
-              <a href="/index.html#services">Servicios</a>
-              <a href="/index.html#performance">Performance</a>
-              <a href="/index.html#brands">Marcas</a>
-              <a href="/index.html#contact">Contacto</a>
+          <nav className={`nav-bar ${isMobileMenuOpen ? 'is-open' : ''}`}>
+            <div className="nav-top">
+              <a className="brand-lockup" href="/index.html" aria-label="Euro Parts Engineering" onClick={closeMobileMenu}>
+                <img src="/logo.png" alt="Euro Parts Engineering LLC" />
+              </a>
+              <button
+                className="nav-mobile-toggle"
+                type="button"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="work-order-nav-menu"
+                aria-label="Abrir menu"
+                onClick={() => setIsMobileMenuOpen((current) => !current)}
+              >
+                <span className="nav-mobile-toggle-box" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span>Menu</span>
+              </button>
             </div>
-            <a className="nav-cta" href="/index.html">
-              Volver al inicio
-            </a>
+            <div className="nav-actions" id="work-order-nav-menu">
+              <div className="nav-links">
+                <a href="/index.html#services" onClick={closeMobileMenu}>
+                  Servicios
+                </a>
+                <a href="/index.html#performance" onClick={closeMobileMenu}>
+                  Performance
+                </a>
+                <a href="/index.html#brands" onClick={closeMobileMenu}>
+                  Marcas
+                </a>
+                <a href="/index.html#contact" onClick={closeMobileMenu}>
+                  Contacto
+                </a>
+              </div>
+              <a className="nav-cta" href="/index.html" onClick={closeMobileMenu}>
+                Volver al inicio
+              </a>
+            </div>
           </nav>
         </div>
 
@@ -308,17 +338,23 @@ function WorkOrderPage() {
                 <div className="table-head">Cantidad</div>
                 {laborRows.map((row, index) => (
                   <div className="table-row" key={`labor-${index}`}>
-                    <input
-                      placeholder="Descripción del trabajo"
-                      value={row.description}
-                      onChange={(event) => updateLaborRow(index, 'description', event.target.value)}
-                    />
-                    <input
-                      placeholder="0.00"
-                      inputMode="decimal"
-                      value={row.amount}
-                      onChange={(event) => updateLaborRow(index, 'amount', event.target.value)}
-                    />
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Descripción</span>
+                      <input
+                        placeholder="Descripción del trabajo"
+                        value={row.description}
+                        onChange={(event) => updateLaborRow(index, 'description', event.target.value)}
+                      />
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Cantidad</span>
+                      <input
+                        placeholder="0.00"
+                        inputMode="decimal"
+                        value={row.amount}
+                        onChange={(event) => updateLaborRow(index, 'amount', event.target.value)}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -343,34 +379,49 @@ function WorkOrderPage() {
                 <div className="parts-head">Cantidad</div>
                 {partsRows.map((row, index) => (
                   <div className="parts-row" key={`part-${index}`}>
-                    <input
-                      placeholder="Número de pieza"
-                      value={row.partNumber}
-                      onChange={(event) => updatePartRow(index, 'partNumber', event.target.value)}
-                    />
-                    <input
-                      placeholder="Nombre de pieza"
-                      value={row.name}
-                      onChange={(event) => updatePartRow(index, 'name', event.target.value)}
-                    />
-                    <input
-                      placeholder="1"
-                      inputMode="numeric"
-                      value={row.quantity}
-                      onChange={(event) => updatePartRow(index, 'quantity', event.target.value)}
-                    />
-                    <input
-                      placeholder="0.00"
-                      inputMode="decimal"
-                      value={row.unitPrice}
-                      onChange={(event) => updatePartRow(index, 'unitPrice', event.target.value)}
-                    />
-                    <input
-                      placeholder="0.00"
-                      inputMode="decimal"
-                      value={row.amount}
-                      onChange={(event) => updatePartRow(index, 'amount', event.target.value)}
-                    />
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Pieza #</span>
+                      <input
+                        placeholder="Número de pieza"
+                        value={row.partNumber}
+                        onChange={(event) => updatePartRow(index, 'partNumber', event.target.value)}
+                      />
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Nombre de pieza</span>
+                      <input
+                        placeholder="Nombre de pieza"
+                        value={row.name}
+                        onChange={(event) => updatePartRow(index, 'name', event.target.value)}
+                      />
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Cant.</span>
+                      <input
+                        placeholder="1"
+                        inputMode="numeric"
+                        value={row.quantity}
+                        onChange={(event) => updatePartRow(index, 'quantity', event.target.value)}
+                      />
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Precio unitario</span>
+                      <input
+                        placeholder="0.00"
+                        inputMode="decimal"
+                        value={row.unitPrice}
+                        onChange={(event) => updatePartRow(index, 'unitPrice', event.target.value)}
+                      />
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-field-label">Cantidad</span>
+                      <input
+                        placeholder="0.00"
+                        inputMode="decimal"
+                        value={row.amount}
+                        onChange={(event) => updatePartRow(index, 'amount', event.target.value)}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

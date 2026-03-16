@@ -112,6 +112,8 @@ function SectionBanner({ eyebrow, title, description, images, variant }) {
 }
 
 function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -133,23 +135,52 @@ function App() {
     return () => observer.disconnect()
   }, [])
 
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
   return (
     <>
       <header className="site-hero">
         <div className="page-shell nav-shell">
-          <nav className="nav-bar">
-            <a className="brand-lockup" href="#top" aria-label="Euro Parts Engineering">
-              <img src="/logo.png" alt="Euro Parts Engineering LLC" />
-            </a>
-            <div className="nav-links">
-              <a href="#services">Servicios</a>
-              <a href="#performance">Performance</a>
-              <a href="#brands">Marcas</a>
-              <a href="#contact">Contacto</a>
+          <nav className={`nav-bar ${isMobileMenuOpen ? 'is-open' : ''}`}>
+            <div className="nav-top">
+              <a className="brand-lockup" href="#top" aria-label="Euro Parts Engineering" onClick={closeMobileMenu}>
+                <img src="/logo.png" alt="Euro Parts Engineering LLC" />
+              </a>
+              <button
+                className="nav-mobile-toggle"
+                type="button"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="site-nav-menu"
+                aria-label="Abrir menu"
+                onClick={() => setIsMobileMenuOpen((current) => !current)}
+              >
+                <span className="nav-mobile-toggle-box" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span>Menu</span>
+              </button>
             </div>
-            <a className="nav-cta" href="/orden-de-trabajo.html">
-              Orden de trabajo
-            </a>
+            <div className="nav-actions" id="site-nav-menu">
+              <div className="nav-links">
+                <a href="#services" onClick={closeMobileMenu}>
+                  Servicios
+                </a>
+                <a href="#performance" onClick={closeMobileMenu}>
+                  Performance
+                </a>
+                <a href="#brands" onClick={closeMobileMenu}>
+                  Marcas
+                </a>
+                <a href="#contact" onClick={closeMobileMenu}>
+                  Contacto
+                </a>
+              </div>
+              <a className="nav-cta" href="/orden-de-trabajo.html" onClick={closeMobileMenu}>
+                Orden de trabajo
+              </a>
+            </div>
           </nav>
         </div>
 
@@ -377,7 +408,7 @@ function App() {
             </div>
             <div className="map-frame">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d35449.96867647493!2d-66.08638986095401!3d18.42085775327863!2m3!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c0368f3ddd41f73%3A0x831e9e0a664f14b2!2sEuro%20Parts%20Engineering!5e0!3m2!1sen!2spr!4v1773688279322!5m2!1sen!2spr"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d35449.96867647493!2d-66.08638986095401!3d18.42085775327863!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c0368f3ddd41f73%3A0x831e9e0a664f14b2!2sEuro%20Parts%20Engineering!5e0!3m2!1sen!2spr!4v1773688279322!5m2!1sen!2spr"
                 width="600"
                 height="450"
                 style={{ border: 0 }}
