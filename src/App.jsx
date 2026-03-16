@@ -40,7 +40,7 @@ function SectionIcon({ kind }) {
 }
 
 function BrandMark({ make, mode = 'marquee' }) {
-  if (mode === 'grid' && make.logoSrc) {
+  if (make.logoSrc) {
     return <img className="brand-logo-image" src={make.logoSrc} alt={make.name} loading="lazy" />
   }
 
@@ -113,6 +113,7 @@ function SectionBanner({ eyebrow, title, description, images, variant }) {
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const marqueeMakes = makes.filter((make) => make.logoSrc)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -240,7 +241,7 @@ function App() {
                 </div>
                 <div className="make-marquee" aria-label="Marcas europeas">
                   <div className="make-marquee-track">
-                    {[...makes, ...makes].map((make, index) => (
+                    {[...marqueeMakes, ...marqueeMakes].map((make, index) => (
                       <div className="make-chip" key={`${make.name}-${index}`} title={make.name}>
                         <BrandMark make={make} />
                       </div>
