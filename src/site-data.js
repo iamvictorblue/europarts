@@ -20,10 +20,10 @@ import {
 
 export const serviceOptions = [
   {
-    title: 'Diagnostico computarizado',
-    shortLabel: 'Diagnostico',
+    title: 'Diagnóstico computarizado',
+    shortLabel: 'Diagnóstico',
     code: 'ECU',
-    description: 'Localizacion de fallas electronicas y mecanicas para autos europeos modernos.',
+    description: 'Localización de fallas electrónicas y mecánicas para autos europeos modernos.',
   },
   {
     title: 'Cambios de aceite',
@@ -35,7 +35,7 @@ export const serviceOptions = [
     title: 'Reparacion de fugas',
     shortLabel: 'Fugas',
     code: 'SEAL',
-    description: 'Correccion de fugas de aceite, coolant y otros fluidos antes de danos mayores.',
+    description: 'Corrección de fugas de aceite, coolant y otros fluidos antes de daños mayores.',
   },
   {
     title: 'Bateria y sistema de carga',
@@ -56,7 +56,7 @@ export const serviceOptions = [
     description: 'Mantenimiento de encendido para recuperar suavidad, respuesta y eficiencia.',
   },
   {
-    title: 'Suspension y direccion',
+    title: 'Suspensión y dirección',
     shortLabel: 'Suspension',
     code: 'SUS',
     description: 'Inspeccion y reemplazo de componentes de chasis para mejor manejo.',
@@ -65,7 +65,7 @@ export const serviceOptions = [
     title: 'Sistema de enfriamiento',
     shortLabel: 'Enfriamiento',
     code: 'COOL',
-    description: 'Diagnostico por sobrecalentamiento, bombas, mangueras y fugas.',
+    description: 'Diagnóstico por sobrecalentamiento, bombas, mangueras y fugas.',
   },
   {
     title: 'Servicio de admision',
@@ -77,19 +77,19 @@ export const serviceOptions = [
     title: 'Servicio de A/C',
     shortLabel: 'A/C',
     code: 'AC',
-    description: 'Diagnostico y reparacion del sistema de aire acondicionado.',
+    description: 'Diagnóstico y reparación del sistema de aire acondicionado.',
   },
   {
     title: 'Garantias y devoluciones',
     shortLabel: 'Garantia',
     code: 'RMA',
-    description: 'Apoyo en verificacion de piezas, garantias y devoluciones cuando aplica.',
+    description: 'Apoyo en verificación de piezas, garantías y devoluciones cuando aplica.',
   },
   {
     title: 'Aplicaciones performance',
     shortLabel: 'Performance',
     code: 'TUNE',
-    description: 'Instalaciones y soporte para proyectos mas alla de stock.',
+    description: 'Instalaciones y soporte para proyectos más allá de stock.',
   },
 ]
 
@@ -129,7 +129,7 @@ export const makes = [
 
 export const highlights = [
   {
-    value: '28+ anos',
+    value: '28+ años',
     label: 'Experiencia en piezas, mantenimiento y performance para autos europeos en Puerto Rico.',
   },
   {
@@ -138,7 +138,7 @@ export const highlights = [
   },
   {
     value: 'Lun - Vie',
-    label: '9:00 a.m - 5:00 p.m en 1004 Ave Jesus T. Pinero, San Juan.',
+    label: '9:00 a.m - 5:00 p.m en 1004 Ave Jesús T. Piñero, San Juan.',
   },
 ]
 
@@ -158,11 +158,11 @@ export const shopGallery = [
   },
   {
     src: '/Euro-Parts-EPE-LLC3-1-768x359.webp',
-    alt: 'Vehiculos europeos estacionados frente al taller',
+    alt: 'Vehículos europeos estacionados frente al taller',
   },
   {
     src: '/Euro-Parts-EPE-LLC4-768x359.webp',
-    alt: 'Linea de vehiculos de clientes en Euro Parts Engineering',
+    alt: 'Línea de vehículos de clientes en Euro Parts Engineering',
   },
   {
     src: '/Euro-Parts-EPE-LLC10-768x359.webp',
@@ -170,15 +170,15 @@ export const shopGallery = [
   },
   {
     src: '/Euro-Parts-EPE-LLC11-768x359.webp',
-    alt: 'Vehiculos europeos de lujo y performance atendidos por el taller',
+    alt: 'Vehículos europeos de lujo y performance atendidos por el taller',
   },
   {
     src: '/Euro-Parts-EPE-LLC14-768x359.webp',
-    alt: 'Vehiculos y ambiente del taller en Euro Parts Engineering',
+    alt: 'Vehículos y ambiente del taller en Euro Parts Engineering',
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.37.53 PM (1).webp',
-    alt: 'Vehiculo europeo recibiendo servicio dentro del taller EPE',
+    alt: 'Vehículo europeo recibiendo servicio dentro del taller EPE',
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.37.54 PM.webp',
@@ -186,41 +186,41 @@ export const shopGallery = [
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.37.55 PM.webp',
-    alt: 'Preparacion de motor turbo y configuracion performance',
+    alt: 'Preparación de motor turbo y configuración performance',
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.37.56 PM.webp',
-    alt: 'Trabajo mecanico de cerca sobre un motor europeo',
+    alt: 'Trabajo mecánico de cerca sobre un motor europeo',
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.37.56 PM (1).webp',
-    alt: 'Trabajo de reparacion y tuning en progreso',
+    alt: 'Trabajo de reparación y tuning en progreso',
   },
   {
     src: '/WhatsApp Image 2026-03-16 at 3.38.16 PM.webp',
-    alt: 'Tecnico trabajando un wagon europeo dentro del taller',
+    alt: 'Técnico trabajando un wagon europeo dentro del taller',
   },
 ]
 
 export const bannerStories = [
   {
     eyebrow: 'Presencia EPE',
-    title: 'Recepcion, inventario y atencion especializada para autos europeos en Puerto Rico.',
-    description: 'Cada visita al taller combina trato directo, piezas correctas y una operacion enfocada en servicio europeo.',
+    title: 'Recepción, inventario y atención especializada para autos europeos en Puerto Rico.',
+    description: 'Cada visita al taller combina trato directo, piezas correctas y una operación enfocada en servicio europeo.',
     variant: 'blue',
     images: shopGallery.slice(0, 4),
   },
   {
     eyebrow: 'Trabajo especializado',
-    title: 'Diagnostico preciso, mantenimiento preventivo y reparaciones con criterio tecnico.',
-    description: 'Desde servicio diario hasta trabajos mas exigentes, cada caso se maneja con enfoque en confiabilidad y rendimiento.',
+    title: 'Diagnóstico preciso, mantenimiento preventivo y reparaciones con criterio técnico.',
+    description: 'Desde servicio diario hasta trabajos más exigentes, cada caso se maneja con enfoque en confiabilidad y rendimiento.',
     variant: 'red',
     images: shopGallery.slice(4, 8),
   },
   {
     eyebrow: 'Performance real',
     title: 'Motores, preparaciones y upgrades respaldados por experiencia en proyectos performance.',
-    description: 'EPE integra piezas, instalacion y soporte para clientes que buscan mejor respuesta, potencia y atencion experta.',
+    description: 'EPE integra piezas, instalación y soporte para clientes que buscan mejor respuesta, potencia y atención experta.',
     variant: 'orange',
     images: shopGallery.slice(8, 12),
   },
@@ -228,21 +228,21 @@ export const bannerStories = [
 
 export const tuningHighlights = [
   {
-    title: 'Programacion avanzada y performance tuning',
-    description: 'Programaciones estandar y racing',
+    title: 'Programación avanzada y performance tuning',
+    description: 'Programaciones estándar y racing',
     image: '/WhatsApp Image 2026-03-16 at 3.37.56 PM.webp',
     alt: 'Trabajo de motor performance en Euro Parts Engineering',
   },
   {
     title: 'Distribuidores exclusivos de APR Puerto Rico',
-    description: 'Hardware, calibracion y apoyo para proyectos de alto rendimiento.',
+    description: 'Hardware, calibración y apoyo para proyectos de alto rendimiento.',
     image: '/automotive-racing-products-arp-logo-png_seeklogo-343247.webp',
     alt: 'Logo de Automotive Racing Products',
     logoMode: true,
   },
   {
     title: 'Instaladores certificados de EVOMS (Evolution Motorsport)',
-    description: 'Integracion de componentes respaldados por marcas performance.',
+    description: 'Integración de componentes respaldados por marcas performance.',
     image: '/evoms-evolution-motorsports.webp',
     alt: 'Logo de EVOMS Evolution Motorsports',
     logoMode: true,
@@ -263,26 +263,26 @@ export const maintenanceHighlights = [
     icon: 'oil',
   },
   {
-    title: 'Reemplazo de frenos, suspension y direccion',
+    title: 'Reemplazo de frenos, suspensión y dirección',
     description: 'Componentes de seguridad y chasis para mejor control y calidad de manejo.',
     icon: 'suspension',
   },
   {
-    title: 'Diagnostico computarizado de ultima generacion',
-    description: 'Lectura avanzada y localizacion de fallas para sistemas electronicos y mecanicos.',
+    title: 'Diagnóstico computarizado de última generación',
+    description: 'Lectura avanzada y localización de fallas para sistemas electrónicos y mecánicos.',
     icon: 'diagnostic',
   },
 ]
 
 export const whyChooseCards = [
   {
-    title: 'Lideres en piezas para carros europeos en Puerto Rico',
-    body: 'Inventario, sourcing y criterio tecnico para encontrar la pieza correcta.',
+    title: 'Líderes en piezas para carros europeos en Puerto Rico',
+    body: 'Inventario, sourcing y criterio técnico para encontrar la pieza correcta.',
     icon: 'parts',
   },
   {
-    title: 'Mas de 28 anos de experiencia',
-    body: 'Miles de clientes atendidos y soluciones para multiples plataformas europeas.',
+    title: 'Más de 28 años de experiencia',
+    body: 'Miles de clientes atendidos y soluciones para múltiples plataformas europeas.',
     icon: 'check',
   },
   {
