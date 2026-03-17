@@ -179,7 +179,7 @@ function App() {
                 </a>
               </div>
               <a className="nav-cta" href="/orden-de-trabajo.html" onClick={closeMobileMenu}>
-                Orden de trabajo
+                Solicitar cotizacion
               </a>
             </div>
           </nav>
@@ -213,7 +213,7 @@ function App() {
                   </p>
                   <div className="hero-actions">
                     <a className="button button-primary" href="/orden-de-trabajo.html">
-                      Llenar orden
+                      Solicitar cotizacion
                     </a>
                     <a className="button button-secondary" href="tel:+17872779490">
                       Llamar al taller
@@ -387,10 +387,10 @@ function App() {
           <section className="panel-section location-section reveal" id="contact">
             <div className="location-copy">
               <p className="eyebrow">Contáctanos hoy</p>
-              <h2>Visítanos en San Juan o envíanos tu orden de trabajo antes de llegar.</h2>
+              <h2>Visitanos en San Juan o envianos tu solicitud de cotizacion antes de llegar.</h2>
               <p>
                 Atendemos citas, cotizaciones y seguimiento directamente desde el taller, con
-                recepción digital disponible para agilizar el proceso.
+                un formulario digital disponible para agilizar la evaluacion inicial.
               </p>
               <div className="location-details">
                 <a href="tel:+17872779490">(787) 277-9490</a>
@@ -400,7 +400,7 @@ function App() {
               </div>
               <div className="location-actions">
                 <a className="button button-primary" href="/orden-de-trabajo.html">
-                  Ir a la orden de trabajo
+                  Ir al formulario de cotizacion
                 </a>
                 <a className="button button-secondary" href="https://maps.google.com/?q=1004+Ave+Jesus+T+Piñero+San+Juan+PR+00921">
                   Abrir en mapas
@@ -432,7 +432,8 @@ function App() {
             <a href="#services">Servicios</a>
             <a href="#performance">Performance</a>
             <a href="#brands">Marcas</a>
-            <a href="/orden-de-trabajo.html">Orden de trabajo</a>
+            <a href="/orden-de-trabajo.html">Cotizacion</a>
+            <a href="/admin.html">Admin</a>
           </div>
           <div className="footer-contact">
             <p className="eyebrow">Contacto</p>

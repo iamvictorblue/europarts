@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { serviceOptions } from './site-data'
+import { isSupabaseConfigured, supabase } from './lib/supabase'
 
-const defaultLine = { description: '', amount: '' }
-const defaultPart = { partNumber: '', name: '', quantity: '1', unitPrice: '', amount: '' }
-const storageKey = 'epe-work-order-draft'
+const storageKey = 'epe-quote-request-draft'
 const legacyServiceLabels = {
   Diagnostic: 'Diagnóstico',
   'Oil Change': 'Aceite',
@@ -24,41 +23,25 @@ const legacyServiceLabels = {
   Garantia: 'Garantía',
 }
 
-function currency(value) {
-  return new Intl.NumberFormat('es-PR', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(value || 0)
-}
-
-function toNumber(value) {
-  const parsed = Number.parseFloat(value)
-  return Number.isFinite(parsed) ? parsed : 0
-}
-
 function buildInitialState(today) {
   const baseState = {
     selectedServices: ['Diagnóstico'],
-    laborRows: [{ ...defaultLine }, { ...defaultLine }],
-    partsRows: [{ ...defaultPart }, { ...defaultPart }],
-    taxRate: '11.5',
     formData: {
       clientName: '',
       clientPhone: '',
-      date: today,
-      orderReceivedBy: '',
-      orderDateTime: '',
-      datePromised: '',
-      dateDelivered: '',
+      clientEmail: '',
+      preferredContact: 'Llamada',
+      requestDate: today,
+      vehicleYear: '',
+      makeModel: '',
       vin: '',
       odometer: '',
-      makeModel: '',
-      license: '',
-      motor: '',
-      workOrderCompiledBy: '',
-      workAuthorizedBy: '',
-      authorizationDate: today,
-      notes: '',
+      serviceType: 'Reparación',
+      availability: '',
+      budgetRange: '',
+      issueDetails: '',
+      goals: '',
+      requestItems: '',
     },
   }
 
@@ -73,9 +56,6 @@ function buildInitialState(today) {
       selectedServices: parsed.selectedServices?.length
         ? parsed.selectedServices.map((service) => legacyServiceLabels[service] ?? service)
         : baseState.selectedServices,
-      laborRows: parsed.laborRows?.length ? parsed.laborRows : baseState.laborRows,
-      partsRows: parsed.partsRows?.length ? parsed.partsRows : baseState.partsRows,
-      taxRate: parsed.taxRate ?? baseState.taxRate,
       formData: { ...baseState.formData, ...parsed.formData },
     }
   } catch {
@@ -88,34 +68,19 @@ function WorkOrderPage() {
   const initialState = buildInitialState(today)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [selectedServices, setSelectedServices] = useState(initialState.selectedServices)
-  const [laborRows, setLaborRows] = useState(initialState.laborRows)
-  const [partsRows, setPartsRows] = useState(initialState.partsRows)
-  const [taxRate, setTaxRate] = useState(initialState.taxRate)
   const [formData, setFormData] = useState(initialState.formData)
-
-  const laborTotal = laborRows.reduce((sum, row) => sum + toNumber(row.amount), 0)
-  const partsTotal = partsRows.reduce((sum, row) => {
-    const quantity = toNumber(row.quantity)
-    const unitPrice = toNumber(row.unitPrice)
-    const amount = row.amount ? toNumber(row.amount) : quantity * unitPrice
-    return sum + amount
-  }, 0)
-  const subtotal = laborTotal + partsTotal
-  const totalTax = subtotal * (toNumber(taxRate) / 100)
-  const total = subtotal + totalTax
+  const [submitState, setSubmitState] = useState('idle')
+  const [submitMessage, setSubmitMessage] = useState('')
 
   useEffect(() => {
     window.localStorage.setItem(
       storageKey,
       JSON.stringify({
         selectedServices,
-        laborRows,
-        partsRows,
-        taxRate,
         formData,
       }),
     )
-  }, [formData, laborRows, partsRows, selectedServices, taxRate])
+  }, [formData, selectedServices])
 
   const toggleService = (service) => {
     setSelectedServices((current) =>
@@ -130,40 +95,64 @@ function WorkOrderPage() {
     setFormData((current) => ({ ...current, [name]: value }))
   }
 
-  const updateLaborRow = (index, key, value) => {
-    setLaborRows((current) =>
-      current.map((row, rowIndex) => (rowIndex === index ? { ...row, [key]: value } : row)),
-    )
-  }
-
-  const updatePartRow = (index, key, value) => {
-    setPartsRows((current) =>
-      current.map((row, rowIndex) => {
-        if (rowIndex !== index) {
-          return row
-        }
-
-        const nextRow = { ...row, [key]: value }
-        if (key === 'quantity' || key === 'unitPrice') {
-          nextRow.amount = String(toNumber(nextRow.quantity) * toNumber(nextRow.unitPrice))
-        }
-        return nextRow
-      }),
-    )
-  }
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    window.print()
+
+    if (!isSupabaseConfigured || !supabase) {
+      setSubmitState('error')
+      setSubmitMessage('Faltan las credenciales de Supabase. Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.')
+      return
+    }
+
+    const payload = {
+      client_name: formData.clientName.trim(),
+      client_phone: formData.clientPhone.trim(),
+      client_email: formData.clientEmail.trim(),
+      preferred_contact: formData.preferredContact,
+      request_date: formData.requestDate || null,
+      vehicle_year: formData.vehicleYear.trim(),
+      make_model: formData.makeModel.trim(),
+      vin: formData.vin.trim(),
+      odometer: formData.odometer.trim(),
+      service_type: formData.serviceType,
+      availability: formData.availability.trim(),
+      budget_range: formData.budgetRange.trim(),
+      issue_details: formData.issueDetails.trim(),
+      goals: formData.goals.trim(),
+      request_items: formData.requestItems.trim(),
+      selected_services: selectedServices,
+      source_page: 'orden-de-trabajo.html',
+      status: 'nueva',
+    }
+
+    if (!payload.client_name || !payload.client_phone || !payload.make_model || !payload.issue_details) {
+      setSubmitState('error')
+      setSubmitMessage('Completa nombre, telefono, marca/modelo y la descripcion del trabajo para enviar la solicitud.')
+      return
+    }
+
+    setSubmitState('submitting')
+    setSubmitMessage('')
+
+    const { error } = await supabase.from('quote_requests').insert(payload)
+
+    if (error) {
+      setSubmitState('error')
+      setSubmitMessage('No se pudo enviar la solicitud. Verifica la tabla y las politicas de Supabase.')
+      return
+    }
+
+    setSubmitState('success')
+    setSubmitMessage('Solicitud enviada. El taller ya puede revisarla en Supabase.')
+    window.localStorage.removeItem(storageKey)
   }
 
   const clearDraft = () => {
     const freshState = buildInitialState(today)
     setSelectedServices(freshState.selectedServices)
-    setLaborRows(freshState.laborRows)
-    setPartsRows(freshState.partsRows)
-    setTaxRate(freshState.taxRate)
     setFormData(freshState.formData)
+    setSubmitState('idle')
+    setSubmitMessage('')
     window.localStorage.removeItem(storageKey)
   }
 
@@ -217,11 +206,11 @@ function WorkOrderPage() {
         </div>
 
         <div className="page-shell subpage-shell">
-          <p className="eyebrow">Orden de trabajo digital</p>
-          <h1>Recepción clara para diagnóstico, autorización y seguimiento.</h1>
+          <p className="eyebrow">Solicitud de cotización</p>
+          <h1>Cotiza reparación, mantenimiento o upgrades para tu auto europeo.</h1>
           <p className="hero-text">
-            Esta página vive separada del landing para que el recorrido principal del sitio se sienta
-            más enfocado. Aquí puedes llenar, imprimir o guardar la orden de trabajo del taller.
+            Dejamos este formulario más corto para que puedas enviarlo rápido desde el celular y el
+            taller tenga lo esencial para evaluar tu caso.
           </p>
         </div>
       </header>
@@ -229,53 +218,47 @@ function WorkOrderPage() {
       <main className="page-shell work-order-layout">
         <section className="panel-section work-order-panel">
           <div className="section-heading">
-            <p className="eyebrow">Formulario del taller</p>
-            <h2>Basado en la hoja física incluida, con totales calculados automáticamente.</h2>
+            <p className="eyebrow">Formulario de cotización</p>
           </div>
 
           <form className="work-order-card" onSubmit={handleSubmit}>
             <div className="form-block">
-              <h3>Datos del cliente y la orden</h3>
+              <h3>Contacto</h3>
               <div className="field-grid two-up">
                 <label>
-                  Nombre del cliente
+                  Nombre
                   <input name="clientName" value={formData.clientName} onChange={updateFormField} />
                 </label>
                 <label>
-                  Teléfono del cliente
+                  Teléfono
                   <input name="clientPhone" value={formData.clientPhone} onChange={updateFormField} />
                 </label>
                 <label>
-                  Fecha
-                  <input type="date" name="date" value={formData.date} onChange={updateFormField} />
+                  Email
+                  <input name="clientEmail" value={formData.clientEmail} onChange={updateFormField} />
                 </label>
                 <label>
-                  Recibido por
-                  <input name="orderReceivedBy" value={formData.orderReceivedBy} onChange={updateFormField} />
-                </label>
-                <label>
-                  Fecha y hora de la orden
-                  <input
-                    type="datetime-local"
-                    name="orderDateTime"
-                    value={formData.orderDateTime}
-                    onChange={updateFormField}
-                  />
-                </label>
-                <label>
-                  Fecha prometida
-                  <input type="date" name="datePromised" value={formData.datePromised} onChange={updateFormField} />
-                </label>
-                <label>
-                  Fecha entregada
-                  <input type="date" name="dateDelivered" value={formData.dateDelivered} onChange={updateFormField} />
+                  Contacto preferido
+                  <select name="preferredContact" value={formData.preferredContact} onChange={updateFormField}>
+                    <option>Llamada</option>
+                    <option>Texto</option>
+                    <option>Email</option>
+                  </select>
                 </label>
               </div>
             </div>
 
             <div className="form-block">
-              <h3>Datos del vehículo</h3>
+              <h3>Vehículo</h3>
               <div className="field-grid two-up">
+                <label>
+                  Año
+                  <input name="vehicleYear" value={formData.vehicleYear} onChange={updateFormField} />
+                </label>
+                <label>
+                  Marca y modelo
+                  <input name="makeModel" value={formData.makeModel} onChange={updateFormField} />
+                </label>
                 <label>
                   VIN
                   <input name="vin" value={formData.vin} onChange={updateFormField} />
@@ -284,23 +267,36 @@ function WorkOrderPage() {
                   Millaje
                   <input name="odometer" value={formData.odometer} onChange={updateFormField} />
                 </label>
-                <label>
-                  Marca y modelo
-                  <input name="makeModel" value={formData.makeModel} onChange={updateFormField} />
-                </label>
-                <label>
-                  Tablilla y estado
-                  <input name="license" value={formData.license} onChange={updateFormField} />
-                </label>
-                <label>
-                  Número de motor
-                  <input name="motor" value={formData.motor} onChange={updateFormField} />
-                </label>
               </div>
             </div>
 
             <div className="form-block">
-              <h3>Servicios solicitados</h3>
+              <h3>Tipo de solicitud</h3>
+              <div className="field-grid two-up">
+                <label>
+                  Trabajo principal
+                  <select name="serviceType" value={formData.serviceType} onChange={updateFormField}>
+                    <option>Reparación</option>
+                    <option>Mantenimiento</option>
+                    <option>Diagnóstico</option>
+                    <option>Performance / upgrade</option>
+                    <option>Piezas</option>
+                  </select>
+                </label>
+                <label>
+                  Disponibilidad
+                  <input name="availability" value={formData.availability} onChange={updateFormField} />
+                </label>
+                <label>
+                  Presupuesto aproximado
+                  <input name="budgetRange" value={formData.budgetRange} onChange={updateFormField} />
+                </label>
+                <label>
+                  Fecha de solicitud
+                  <input type="date" name="requestDate" value={formData.requestDate} onChange={updateFormField} />
+                </label>
+              </div>
+
               <div className="service-pills">
                 {serviceOptions.map((service) => {
                   const active = selectedServices.includes(service.shortLabel)
@@ -316,206 +312,75 @@ function WorkOrderPage() {
                   )
                 })}
               </div>
+            </div>
+
+            <div className="form-block">
+              <h3>Cuéntanos lo necesario</h3>
               <label>
-                Notas u otra solicitud
-                <textarea name="notes" value={formData.notes} onChange={updateFormField} rows="4" />
+                Síntomas, servicio o falla
+                <textarea name="issueDetails" value={formData.issueDetails} onChange={updateFormField} rows="5" />
+              </label>
+              <label>
+                Objetivo del proyecto o upgrade
+                <textarea name="goals" value={formData.goals} onChange={updateFormField} rows="4" />
+              </label>
+              <label>
+                Piezas o servicios que te interesan
+                <textarea name="requestItems" value={formData.requestItems} onChange={updateFormField} rows="4" />
               </label>
             </div>
 
-            <div className="form-block">
-              <div className="block-heading">
-                <h3>Mano de obra</h3>
-                <button
-                  className="small-action"
-                  type="button"
-                  onClick={() => setLaborRows((current) => [...current, { ...defaultLine }])}
-                >
-                  Agregar línea
-                </button>
-              </div>
-              <div className="table-grid labor-grid">
-                <div className="table-head">Descripción</div>
-                <div className="table-head">Cantidad</div>
-                {laborRows.map((row, index) => (
-                  <div className="table-row" key={`labor-${index}`}>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Descripción</span>
-                      <input
-                        placeholder="Descripción del trabajo"
-                        value={row.description}
-                        onChange={(event) => updateLaborRow(index, 'description', event.target.value)}
-                      />
-                    </div>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Cantidad</span>
-                      <input
-                        placeholder="0.00"
-                        inputMode="decimal"
-                        value={row.amount}
-                        onChange={(event) => updateLaborRow(index, 'amount', event.target.value)}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="form-block">
-              <div className="block-heading">
-                <h3>Piezas</h3>
-                <button
-                  className="small-action"
-                  type="button"
-                  onClick={() => setPartsRows((current) => [...current, { ...defaultPart }])}
-                >
-                  Agregar línea
-                </button>
-              </div>
-              <div className="parts-table">
-                <div className="parts-head">Pieza #</div>
-                <div className="parts-head">Nombre de pieza</div>
-                <div className="parts-head">Cant.</div>
-                <div className="parts-head">Precio unitario</div>
-                <div className="parts-head">Cantidad</div>
-                {partsRows.map((row, index) => (
-                  <div className="parts-row" key={`part-${index}`}>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Pieza #</span>
-                      <input
-                        placeholder="Número de pieza"
-                        value={row.partNumber}
-                        onChange={(event) => updatePartRow(index, 'partNumber', event.target.value)}
-                      />
-                    </div>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Nombre de pieza</span>
-                      <input
-                        placeholder="Nombre de pieza"
-                        value={row.name}
-                        onChange={(event) => updatePartRow(index, 'name', event.target.value)}
-                      />
-                    </div>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Cant.</span>
-                      <input
-                        placeholder="1"
-                        inputMode="numeric"
-                        value={row.quantity}
-                        onChange={(event) => updatePartRow(index, 'quantity', event.target.value)}
-                      />
-                    </div>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Precio unitario</span>
-                      <input
-                        placeholder="0.00"
-                        inputMode="decimal"
-                        value={row.unitPrice}
-                        onChange={(event) => updatePartRow(index, 'unitPrice', event.target.value)}
-                      />
-                    </div>
-                    <div className="mobile-field">
-                      <span className="mobile-field-label">Cantidad</span>
-                      <input
-                        placeholder="0.00"
-                        inputMode="decimal"
-                        value={row.amount}
-                        onChange={(event) => updatePartRow(index, 'amount', event.target.value)}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="form-footer">
-              <div className="field-grid two-up">
-                <label>
-                  Orden preparada por
-                  <input
-                    name="workOrderCompiledBy"
-                    value={formData.workOrderCompiledBy}
-                    onChange={updateFormField}
-                  />
-                </label>
-                <label>
-                  Trabajo autorizado por
-                  <input
-                    name="workAuthorizedBy"
-                    value={formData.workAuthorizedBy}
-                    onChange={updateFormField}
-                  />
-                </label>
-                <label>
-                  Fecha de autorización
-                  <input
-                    type="date"
-                    name="authorizationDate"
-                    value={formData.authorizationDate}
-                    onChange={updateFormField}
-                  />
-                </label>
-                <label>
-                  IVU %
-                  <input value={taxRate} onChange={(event) => setTaxRate(event.target.value)} />
-                </label>
-              </div>
-
+            <div className="form-footer form-footer-single">
               <aside className="totals-card">
-                <div>
-                  <span>Total mano de obra</span>
-                  <strong>{currency(laborTotal)}</strong>
+                <div className="quote-summary-row">
+                  <span>Tipo de solicitud</span>
+                  <strong>{formData.serviceType}</strong>
                 </div>
-                <div>
-                  <span>Total piezas</span>
-                  <strong>{currency(partsTotal)}</strong>
-                </div>
-                <div>
-                  <span>Subtotal</span>
-                  <strong>{currency(subtotal)}</strong>
-                </div>
-                <div>
-                  <span>Total IVU</span>
-                  <strong>{currency(totalTax)}</strong>
+                <div className="quote-summary-row">
+                  <span>Servicios marcados</span>
+                  <strong>{selectedServices.length}</strong>
                 </div>
                 <div className="grand-total">
-                  <span>Total</span>
-                  <strong>{currency(total)}</strong>
+                  <span>Próximo paso</span>
+                  <strong>Revisión del taller</strong>
                 </div>
               </aside>
             </div>
 
             <div className="submit-row">
               <div className="submit-actions">
-                <button className="button button-primary" type="submit">
-                  Imprimir o guardar orden
+                <button className="button button-primary" type="submit" disabled={submitState === 'submitting'}>
+                  {submitState === 'submitting' ? 'Enviando solicitud...' : 'Enviar solicitud'}
                 </button>
                 <button className="button button-secondary" type="button" onClick={clearDraft}>
                   Limpiar borrador
                 </button>
               </div>
-              <p>
-                Lista para recepción, impresión y futura integración con correo o administración del
-                taller.
-              </p>
+              <div className="submit-copy">
+                <p>Compártelo con el taller para acelerar la evaluacion inicial y la cotizacion.</p>
+                {submitMessage ? (
+                  <p className={`submit-status submit-status-${submitState}`}>{submitMessage}</p>
+                ) : null}
+              </div>
             </div>
           </form>
         </section>
 
         <aside className="panel-section work-order-sidebar">
           <div className="sidebar-block">
-            <p className="eyebrow">Información del taller</p>
+            <p className="eyebrow">Informacion del taller</p>
             <h2>Euro Parts Engineering LLC</h2>
-            <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
+            <p>1004 Ave Jesus T. Pinero, San Juan, PR 00921</p>
             <p>lunes a viernes 9:00 a.m - 5:00 p.m</p>
             <a href="tel:+17872779490">(787) 277-9490</a>
             <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
           </div>
           <div className="sidebar-block">
-            <p className="eyebrow">Recomendación</p>
-            <h2>Llama antes de llegar</h2>
+            <p className="eyebrow">Consejo</p>
+            <h2>Mientras mas claro, mejor</h2>
             <p>
-              Confirma disponibilidad, estimados y coordinación de entrega para que la recepción sea
-              más rápida.
+              Si incluyes sintomas, objetivo del trabajo y preferencias de piezas, el taller puede
+              responder con una orientacion inicial mas precisa.
             </p>
           </div>
           <div className="mini-map-frame">
