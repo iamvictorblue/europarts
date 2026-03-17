@@ -74,10 +74,10 @@ export const serviceOptions = [
     description: 'Filtro de aire y componentes de admision para flujo y rendimiento constante.',
   },
   {
-    title: 'Servicio de A/C',
+    title: 'Diagnostico del sistema de aire acondicionado',
     shortLabel: 'A/C',
     code: 'AC',
-    description: 'Diagnóstico y reparación del sistema de aire acondicionado.',
+    description: 'Diagnostico del sistema de aire acondicionado y revision de sus componentes.',
   },
   {
     title: 'Garantias y devoluciones',
@@ -227,12 +227,6 @@ export const bannerStories = [
 ]
 
 export const tuningHighlights = [
-  {
-    title: 'Programación avanzada y performance tuning',
-    description: 'Programaciones estándar y racing',
-    image: '/WhatsApp Image 2026-03-16 at 3.37.56 PM.webp',
-    alt: 'Trabajo de motor performance en Euro Parts Engineering',
-  },
   {
     title: 'Distribuidores exclusivos de APR Puerto Rico',
     description: 'Hardware, calibración y apoyo para proyectos de alto rendimiento.',
