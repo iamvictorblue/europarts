@@ -74,7 +74,7 @@ function BannerSlideshow({ images }) {
   }, [images.length])
 
   return (
-    <div className="section-banner-slideshow" aria-label="Galeria del taller">
+    <div className="section-banner-slideshow" aria-label="Galería del taller">
       {images.map((image, index) => (
         <figure
           className={`section-banner-shot ${index === activeIndex ? 'is-active' : ''}`}
@@ -152,7 +152,7 @@ function App() {
                 type="button"
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="site-nav-menu"
-                aria-label="Abrir menu"
+                aria-label="Abrir menú"
                 onClick={() => setIsMobileMenuOpen((current) => !current)}
               >
                 <span className="nav-mobile-toggle-box" aria-hidden="true">
@@ -160,7 +160,7 @@ function App() {
                   <span />
                   <span />
                 </span>
-                <span>Menu</span>
+                <span>Menú</span>
               </button>
             </div>
             <div className="nav-actions" id="site-nav-menu">
@@ -208,8 +208,8 @@ function App() {
                     experto en autos europeos
                   </h1>
                   <p className="hero-text">
-                    Con mas de 28 anos de experiencia, somos lideres en la venta de piezas OEM,
-                    accesorios y mantenimiento especializado para vehiculos europeos.
+                    Con más de 28 años de experiencia, somos líderes en la venta de piezas OEM,
+                    accesorios y mantenimiento especializado para vehículos europeos.
                   </p>
                   <div className="hero-actions">
                     <a className="button button-primary" href="/orden-de-trabajo.html">
@@ -259,9 +259,9 @@ function App() {
           <section className="panel-section reveal" id="services">
             <div className="section-heading">
               <p className="eyebrow">Nuestros servicios</p>
-              <h2>Diagnostico, mantenimiento, piezas y performance para autos europeos.</h2>
+              <h2>Diagnóstico, mantenimiento, piezas y performance para autos europeos.</h2>
               <p>
-                Atendemos servicio preventivo, reparaciones, diagnostico avanzado, piezas OEM y
+                Atendemos servicio preventivo, reparaciones, diagnóstico avanzado, piezas OEM y
                 proyectos performance con enfoque en plataformas europeas.
               </p>
             </div>
@@ -284,7 +284,7 @@ function App() {
           <section className="panel-section reveal" id="performance">
             <div className="section-heading section-heading-center">
               <p className="eyebrow">Programacion y tuning</p>
-              <h2 className="section-title-accent">Programacion avanzada y performance tuning</h2>
+              <h2 className="section-title-accent">Programación avanzada y performance tuning</h2>
               <p>
                 Programaciones, hardware y soporte para proyectos de calle o racing con marcas
                 reconocidas y experiencia real en autos europeos.
@@ -308,9 +308,9 @@ function App() {
           <section className="panel-section reveal">
             <div className="section-heading section-heading-center">
               <p className="eyebrow">Mantenimiento especializado</p>
-              <h2>Mantenimiento y reparacion especializada</h2>
+              <h2>Mantenimiento y reparación especializada</h2>
               <p>
-                Servicio preventivo y correctivo con criterio tecnico, piezas correctas y enfoque
+                Servicio preventivo y correctivo con criterio técnico, piezas correctas y enfoque
                 en confiabilidad diaria.
               </p>
             </div>
@@ -337,10 +337,10 @@ function App() {
             <div className="section-heading">
               <p className="eyebrow">Marcas que trabajamos</p>
               <h2 className="section-title-accent">
-                Marcas europeas que atendemos con frecuencia en piezas, servicio y diagnostico.
+                Marcas europeas que atendemos con frecuencia en piezas, servicio y diagnóstico.
               </h2>
               <p>
-                Trabajamos con plataformas alemanas, inglesas, italianas y otras lineas europeas
+                Trabajamos con plataformas alemanas, inglesas, italianas y otras líneas europeas
                 con necesidades OEM y performance.
               </p>
             </div>
@@ -358,11 +358,11 @@ function App() {
 
           <section className="panel-section reveal">
             <div className="section-heading section-heading-center">
-              <p className="eyebrow">Por que elegirnos</p>
-              <h2>Experiencia, inventario y criterio tecnico para resolver bien desde la primera visita.</h2>
+              <p className="eyebrow">Por qué elegirnos</p>
+              <h2>Experiencia, inventario y criterio técnico para resolver bien desde la primera visita.</h2>
               <p>
-                Combinamos venta de piezas, mantenimiento especializado y apoyo tecnico para que
-                cada cliente reciba una solucion completa.
+                Combinamos venta de piezas, mantenimiento especializado y apoyo técnico para que
+                cada cliente reciba una solución completa.
               </p>
             </div>
             <div className="why-grid">
@@ -386,23 +386,23 @@ function App() {
         <div className="page-shell main-shell">
           <section className="panel-section location-section reveal" id="contact">
             <div className="location-copy">
-              <p className="eyebrow">Contactanos hoy</p>
-              <h2>Visitanos en San Juan o envianos tu orden de trabajo antes de llegar.</h2>
+              <p className="eyebrow">Contáctanos hoy</p>
+              <h2>Visítanos en San Juan o envíanos tu orden de trabajo antes de llegar.</h2>
               <p>
                 Atendemos citas, cotizaciones y seguimiento directamente desde el taller, con
-                recepcion digital disponible para agilizar el proceso.
+                recepción digital disponible para agilizar el proceso.
               </p>
               <div className="location-details">
                 <a href="tel:+17872779490">(787) 277-9490</a>
                 <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
-                <p>1004 Ave Jesus T. Pinero, San Juan, PR 00921</p>
+                <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
                 <p>lunes a viernes 9:00 a.m - 5:00 p.m</p>
               </div>
               <div className="location-actions">
                 <a className="button button-primary" href="/orden-de-trabajo.html">
                   Ir a la orden de trabajo
                 </a>
-                <a className="button button-secondary" href="https://maps.google.com/?q=1004+Ave+Jesus+T+Pinero+San+Juan+PR+00921">
+                <a className="button button-secondary" href="https://maps.google.com/?q=1004+Ave+Jesus+T+Piñero+San+Juan+PR+00921">
                   Abrir en mapas
                 </a>
               </div>
@@ -438,7 +438,7 @@ function App() {
             <p className="eyebrow">Contacto</p>
             <a href="tel:+17872779490">(787) 277-9490</a>
             <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
-            <p>1004 Ave Jesus T. Pinero, San Juan, PR 00921</p>
+            <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
           </div>
         </div>
       </footer>
