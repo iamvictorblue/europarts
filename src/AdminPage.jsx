@@ -57,7 +57,7 @@ function AdminPage() {
       .order('created_at', { ascending: false })
 
     if (error) {
-      setRequestError('No se pudieron cargar las solicitudes desde Supabase.')
+      setRequestError('No se pudieron cargar las solicitudes.')
       setRequests([])
       setDrafts({})
     } else {
@@ -102,7 +102,7 @@ function AdminPage() {
     event.preventDefault()
 
     if (!supabase) {
-      setAuthError('Faltan las credenciales de Supabase en el proyecto.')
+      setAuthError('Falta la configuracion del panel.')
       return
     }
 
@@ -192,7 +192,7 @@ function AdminPage() {
 
     setSaveState((current) => ({
       ...current,
-      [requestId]: { state: 'success', message: 'Cambios guardados en Supabase.' },
+      [requestId]: { state: 'success', message: 'Cambios guardados.' },
     }))
   }
 
@@ -260,8 +260,8 @@ function AdminPage() {
         </div>
 
         <div className="page-shell subpage-shell">
-          <p className="eyebrow">Panel admin</p>
-          <h1>Gestiona solicitudes, seguimiento y notas internas desde Supabase.</h1>
+          <p className="eyebrow">Panel interno</p>
+          <h1>Gestiona solicitudes, seguimiento y notas internas del taller.</h1>
           <p className="hero-text">
             Este panel ya permite revisar cotizaciones, mover estados y dejar notas internas para el
             seguimiento del taller.
@@ -274,16 +274,16 @@ function AdminPage() {
           <section className="panel-section admin-panel">
             <div className="section-heading">
               <p className="eyebrow">Configuracion pendiente</p>
-              <h2>Faltan las variables de entorno de Supabase.</h2>
-              <p>Configura `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` para usar el panel admin.</p>
+              <h2>Falta la configuracion para usar el panel.</h2>
+              <p>Revisa las variables de entorno del proyecto antes de abrir esta vista.</p>
             </div>
           </section>
         ) : !session ? (
           <section className="panel-section admin-panel">
             <div className="section-heading">
-              <p className="eyebrow">Acceso admin</p>
+              <p className="eyebrow">Acceso interno</p>
               <h2>Inicia sesion para ver y actualizar las solicitudes.</h2>
-              <p>Usa un usuario creado en Supabase Auth para entrar al panel interno del taller.</p>
+              <p>Usa el acceso interno del taller para revisar y dar seguimiento a cada caso.</p>
             </div>
 
             <form className="work-order-card admin-auth-card" onSubmit={handleSignIn}>
@@ -321,7 +321,7 @@ function AdminPage() {
                 <div className="work-order-card">
                   <p className="eyebrow">Total</p>
                   <h3>{totalRequests}</h3>
-                  <p>Solicitudes guardadas en `quote_requests`.</p>
+                  <p>Solicitudes recibidas desde el formulario.</p>
                 </div>
                 <div className="work-order-card">
                   <p className="eyebrow">Nuevas</p>
@@ -505,17 +505,17 @@ function AdminPage() {
                 {!isLoadingRequests && filteredRequests.length === 0 ? (
                   <div className="work-order-card">
                     <h3>No hay solicitudes con ese filtro.</h3>
-                    <p>Prueba otra busqueda o revisa si ya llegaron registros a `quote_requests`.</p>
+                    <p>Prueba otra busqueda o revisa si ya llegaron solicitudes nuevas.</p>
                   </div>
                 ) : null}
               </div>
             </section>
 
-            <aside className="panel-section work-order-sidebar">
+            <aside className="admin-sidebar">
               <div className="sidebar-block">
                 <p className="eyebrow">Sesion</p>
                 <h2>{session.user.email}</h2>
-                <p>Autenticado con Supabase Auth.</p>
+                <p>Acceso activo al panel interno.</p>
               </div>
               <div className="sidebar-block">
                 <p className="eyebrow">Capacidades</p>
@@ -528,7 +528,7 @@ function AdminPage() {
               <div className="sidebar-block">
                 <p className="eyebrow">Acceso</p>
                 <h2>/admin.html</h2>
-                <p>Este panel usa Supabase Auth con email y contrasena para proteger lectura y edicion.</p>
+                <p>Entrada directa para revisar, actualizar y organizar solicitudes del taller.</p>
               </div>
             </aside>
           </>

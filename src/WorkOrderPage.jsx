@@ -100,7 +100,7 @@ function WorkOrderPage() {
 
     if (!isSupabaseConfigured || !supabase) {
       setSubmitState('error')
-      setSubmitMessage('Faltan las credenciales de Supabase. Configura VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.')
+      setSubmitMessage('El formulario no esta configurado correctamente en este momento.')
       return
     }
 
@@ -138,12 +138,12 @@ function WorkOrderPage() {
 
     if (error) {
       setSubmitState('error')
-      setSubmitMessage('No se pudo enviar la solicitud. Verifica la tabla y las politicas de Supabase.')
+      setSubmitMessage('No se pudo enviar la solicitud. Intenta de nuevo en un momento.')
       return
     }
 
     setSubmitState('success')
-    setSubmitMessage('Solicitud enviada. El taller ya puede revisarla en Supabase.')
+    setSubmitMessage('Solicitud enviada. El taller ya puede revisarla.')
     window.localStorage.removeItem(storageKey)
   }
 
