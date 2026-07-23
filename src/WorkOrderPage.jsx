@@ -207,7 +207,10 @@ function WorkOrderPage() {
 
         <div className="page-shell subpage-shell">
           <p className="eyebrow">Solicitud de cotización</p>
-          <h1>Cotiza reparación, mantenimiento o upgrades para tu auto europeo.</h1>
+          <h1>
+            Cotiza reparación, mantenimiento o upgrades para tu{' '}
+            <span className="title-accent">auto europeo.</span>
+          </h1>
           <p className="hero-text">
             Dejamos este formulario más corto para que puedas enviarlo rápido desde el celular y el
             taller tenga lo esencial para evaluar tu caso.
@@ -219,18 +222,31 @@ function WorkOrderPage() {
         <section className="panel-section work-order-panel">
           <div className="section-heading">
             <p className="eyebrow">Formulario de cotización</p>
+            <p className="required-note">
+              Los campos marcados con <span className="req-mark">*</span> son necesarios para
+              enviar la solicitud.
+            </p>
           </div>
 
           <form className="work-order-card" onSubmit={handleSubmit}>
             <div className="form-block">
-              <h3>Contacto</h3>
+              <h3 className="form-step-heading">
+                <span className="form-step-index" aria-hidden="true">
+                  01
+                </span>
+                Contacto
+              </h3>
               <div className="field-grid two-up">
                 <label>
-                  Nombre
+                  <span className="field-label-text">
+                    Nombre <span className="req-mark">*</span>
+                  </span>
                   <input name="clientName" value={formData.clientName} onChange={updateFormField} />
                 </label>
                 <label>
-                  Teléfono
+                  <span className="field-label-text">
+                    Teléfono <span className="req-mark">*</span>
+                  </span>
                   <input name="clientPhone" value={formData.clientPhone} onChange={updateFormField} />
                 </label>
                 <label>
@@ -249,14 +265,21 @@ function WorkOrderPage() {
             </div>
 
             <div className="form-block">
-              <h3>Vehículo</h3>
+              <h3 className="form-step-heading">
+                <span className="form-step-index" aria-hidden="true">
+                  02
+                </span>
+                Vehículo
+              </h3>
               <div className="field-grid two-up">
                 <label>
                   Año
                   <input name="vehicleYear" value={formData.vehicleYear} onChange={updateFormField} />
                 </label>
                 <label>
-                  Marca y modelo
+                  <span className="field-label-text">
+                    Marca y modelo <span className="req-mark">*</span>
+                  </span>
                   <input name="makeModel" value={formData.makeModel} onChange={updateFormField} />
                 </label>
                 <label>
@@ -271,7 +294,12 @@ function WorkOrderPage() {
             </div>
 
             <div className="form-block">
-              <h3>Tipo de solicitud</h3>
+              <h3 className="form-step-heading">
+                <span className="form-step-index" aria-hidden="true">
+                  03
+                </span>
+                Tipo de solicitud
+              </h3>
               <div className="field-grid two-up">
                 <label>
                   Trabajo principal
@@ -297,6 +325,7 @@ function WorkOrderPage() {
                 </label>
               </div>
 
+              <p className="pills-label">Marca los servicios relacionados</p>
               <div className="service-pills">
                 {serviceOptions.map((service) => {
                   const active = selectedServices.includes(service.shortLabel)
@@ -315,9 +344,16 @@ function WorkOrderPage() {
             </div>
 
             <div className="form-block">
-              <h3>Cuéntanos lo necesario</h3>
+              <h3 className="form-step-heading">
+                <span className="form-step-index" aria-hidden="true">
+                  04
+                </span>
+                Cuéntanos lo necesario
+              </h3>
               <label>
-                Síntomas, servicio o falla
+                <span className="field-label-text">
+                  Síntomas, servicio o falla <span className="req-mark">*</span>
+                </span>
                 <textarea name="issueDetails" value={formData.issueDetails} onChange={updateFormField} rows="5" />
               </label>
               <label>
@@ -367,7 +403,7 @@ function WorkOrderPage() {
         </section>
 
         <aside className="panel-section work-order-sidebar">
-          <div className="sidebar-block">
+          <div className="sidebar-block contact-block">
             <p className="eyebrow">Informacion del taller</p>
             <h2>Euro Parts Engineering LLC</h2>
             <p>1004 Ave Jesus T. Pinero, San Juan, PR 00921</p>

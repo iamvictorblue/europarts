@@ -1,0 +1,113 @@
+/* ============================================================
+   ADMIN DASHBOARD — page-specific refinements ("Carbon Signal")
+   Loaded after styles.css from admin-main.jsx.
+   ============================================================ */
+
+/* ---------- Login / config gate: centered card with EPE logo ---------- */
+
+.admin-layout-gate {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding-block: 3.5rem 5.5rem;
+}
+
+.admin-gate {
+  width: min(560px, 100%);
+  justify-items: center;
+  text-align: center;
+}
+
+.admin-gate .section-heading {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  max-width: none;
+}
+
+.admin-gate .eyebrow {
+  justify-content: center;
+}
+
+.admin-gate h2 {
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  max-width: 20ch;
+}
+
+.admin-gate .section-heading p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.admin-gate-logo {
+  display: block;
+  width: min(220px, 62vw);
+  margin: 0 auto 0.5rem;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.admin-auth-card {
+  width: 100%;
+  margin-top: 0.4rem;
+  text-align: left;
+  box-shadow: var(--shadow-depth);
+}
+
+.admin-auth-card .button {
+  width: 100%;
+  margin-top: 0.2rem;
+}
+
+/* ---------- Status pill: "nueva" (needs-action tint) ---------- */
+
+.admin-status-pill-nueva {
+  background: rgba(249, 99, 2, 0.16);
+  color: #ffb067;
+  box-shadow: inset 0 0 0 1px rgba(249, 99, 2, 0.4);
+}
+
+/* ---------- Request cards ---------- */
+
+.admin-request-card {
+  transition: border-color 220ms ease;
+}
+
+.admin-request-card:hover,
+.admin-request-card:focus-within {
+  border-color: rgba(249, 99, 2, 0.5);
+}
+
+.admin-request-head h3 {
+  font-size: 1.65rem;
+  overflow-wrap: anywhere;
+}
+
+.admin-request-body {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.admin-request-block strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+@media (min-width: 921px) {
+  .admin-request-body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.2rem;
+  }
+
+  .admin-request-body > .admin-request-block:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Sidebar ---------- */
+
+.admin-sidebar .sidebar-block h2 {
+  font-size: 1.45rem;
+  overflow-wrap: anywhere;
+}

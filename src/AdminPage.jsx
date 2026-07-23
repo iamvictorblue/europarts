@@ -228,6 +228,8 @@ function AdminPage() {
     [filters.search, filters.status, requests],
   )
 
+  const isGateView = !isSupabaseConfigured || !session
+
   const totalRequests = requests.length
   const visibleRequests = filteredRequests.length
   const newRequests = requests.filter((request) => request.status === 'nueva').length
@@ -269,9 +271,10 @@ function AdminPage() {
         </div>
       </header>
 
-      <main className="page-shell admin-layout">
+      <main className={`page-shell admin-layout${isGateView ? ' admin-layout-gate' : ''}`}>
         {!isSupabaseConfigured ? (
-          <section className="panel-section admin-panel">
+          <section className="panel-section admin-panel admin-gate">
+            <img className="admin-gate-logo" src="/logo.png" alt="" aria-hidden="true" />
             <div className="section-heading">
               <p className="eyebrow">Configuracion pendiente</p>
               <h2>Falta la configuracion para usar el panel.</h2>
@@ -279,7 +282,8 @@ function AdminPage() {
             </div>
           </section>
         ) : !session ? (
-          <section className="panel-section admin-panel">
+          <section className="panel-section admin-panel admin-gate">
+            <img className="admin-gate-logo" src="/logo.png" alt="" aria-hidden="true" />
             <div className="section-heading">
               <p className="eyebrow">Acceso interno</p>
               <h2>Inicia sesion para ver y actualizar las solicitudes.</h2>

@@ -1,0 +1,169 @@
+/* ============================================================
+   ORDEN DE TRABAJO — page-specific refinements
+   Loaded AFTER styles.css; extends the "Carbon Signal" system.
+   Only presentation: field grouping, labels, submit + status.
+   ============================================================ */
+
+/* ----- Header copy ----- */
+
+.subpage-shell .hero-text {
+  max-width: 62ch;
+}
+
+/* ----- Required-field convention ----- */
+
+.required-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.req-mark {
+  color: var(--accent);
+}
+
+.field-label-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+/* ----- Numbered form blocks (01–04) with hairline separators ----- */
+
+.work-order-card .form-block {
+  border-top: 1px solid var(--line);
+  padding-top: 1.35rem;
+}
+
+.work-order-card .form-block:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.form-step-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.form-step-index {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Service pills group label ----- */
+
+.pills-label {
+  margin: 0.15rem 0 -0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ----- Summary card ----- */
+
+.work-order-card .grand-total strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ----- Submit row: full-width primary action ----- */
+
+.work-order-card .submit-row {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+}
+
+.work-order-card .submit-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+}
+
+.work-order-card .submit-actions .button-secondary {
+  padding-inline: 1.6rem;
+}
+
+/* ----- Success / error status panels ----- */
+
+.work-order-card .submit-status {
+  margin: 0;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.work-order-card .submit-status-success {
+  background: rgba(70, 180, 120, 0.14);
+  border-color: rgba(94, 224, 160, 0.32);
+}
+
+.work-order-card .submit-status-error {
+  background: rgba(217, 31, 47, 0.12);
+  border-color: rgba(255, 138, 122, 0.32);
+}
+
+/* ----- Sidebar: shop info as a hairline definition list ----- */
+
+.contact-block h2 {
+  font-size: 1.6rem;
+}
+
+.contact-block p:not(.eyebrow),
+.contact-block a {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 0.6rem;
+}
+
+.contact-block p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+.contact-block a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  width: fit-content;
+}
+
+.contact-block a:hover {
+  color: var(--accent);
+}
+
+/* ----- Mobile ----- */
+
+@media (max-width: 720px) {
+  .work-order-card .submit-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .work-order-card .submit-actions .button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 560px) {
+  .contact-block a {
+    font-size: 1.3rem;
+  }
+}

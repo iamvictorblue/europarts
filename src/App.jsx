@@ -192,7 +192,7 @@ function App() {
             muted
             loop
             playsInline
-            poster="/logo.png"
+            poster="/Euro-Parts-EPE-LLC2-1024x478.webp"
             preload="metadata"
           >
             <source src="/hero-video.mp4" type="video/mp4" />
@@ -204,7 +204,7 @@ function App() {
                 <div className="hero-copy">
                   <p className="eyebrow">Piezas para carros europeos | Performance en Puerto Rico</p>
                   <h1>
-                    Piezas originales, performance y servicio
+                    Piezas originales, <span className="title-accent">performance</span> y servicio
                     experto en autos europeos
                   </h1>
                   <p className="hero-text">
@@ -255,9 +255,11 @@ function App() {
       </header>
 
       <main>
-        <div className="page-shell main-shell">
+        <div className="section-band">
+          <div className="page-shell main-shell">
           <section className="panel-section reveal" id="services">
             <div className="section-heading">
+              <span className="chapter-index" aria-hidden="true">01</span>
               <p className="eyebrow">Nuestros servicios</p>
               <h2>Diagnóstico, mantenimiento, piezas y performance para autos europeos.</h2>
               <p>
@@ -268,23 +270,29 @@ function App() {
             <div className="service-grid">
               {featuredServices.map((service, index) => (
                 <article className="service-card reveal" key={service.code} style={{ '--delay': `${index * 45}ms` }}>
+                  <span className="service-code">{service.code}</span>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
                 </article>
               ))}
             </div>
           </section>
+          </div>
         </div>
 
         {bannerStories.slice(0, 1).map((story) => (
           <SectionBanner key={story.eyebrow} {...story} />
         ))}
 
-        <div className="page-shell main-shell">
+        <div className="section-band">
+          <div className="page-shell main-shell">
           <section className="panel-section reveal" id="performance">
             <div className="section-heading section-heading-center">
+              <span className="chapter-index" aria-hidden="true">02</span>
               <p className="eyebrow">Programacion y tuning</p>
-              <h2 className="section-title-accent">Programación avanzada y performance tuning</h2>
+              <h2 className="section-title-accent">
+                Programación avanzada y <span className="title-accent">performance tuning</span>
+              </h2>
               <p>
                 Programaciones, hardware y soporte para proyectos de calle o racing con marcas
                 reconocidas y experiencia real en autos europeos.
@@ -307,6 +315,7 @@ function App() {
 
           <section className="panel-section reveal">
             <div className="section-heading section-heading-center">
+              <span className="chapter-index" aria-hidden="true">03</span>
               <p className="eyebrow">Mantenimiento especializado</p>
               <h2>Mantenimiento y reparación especializada</h2>
               <p>
@@ -326,18 +335,22 @@ function App() {
               ))}
             </div>
           </section>
+          </div>
         </div>
 
         {bannerStories.slice(1, 2).map((story) => (
           <SectionBanner key={story.eyebrow} {...story} />
         ))}
 
-        <div className="page-shell main-shell">
+        <div className="section-band">
+          <div className="page-shell main-shell">
           <section className="panel-section reveal" id="brands">
             <div className="section-heading">
+              <span className="chapter-index" aria-hidden="true">04</span>
               <p className="eyebrow">Marcas que trabajamos</p>
               <h2 className="section-title-accent">
-                Marcas europeas que atendemos con frecuencia en piezas, servicio y diagnóstico.
+                Marcas europeas que atendemos con frecuencia en piezas, servicio{' '}
+                <span className="title-accent">y diagnóstico.</span>
               </h2>
               <p>
                 Trabajamos con plataformas alemanas, inglesas, italianas y otras líneas europeas
@@ -358,6 +371,7 @@ function App() {
 
           <section className="panel-section reveal">
             <div className="section-heading section-heading-center">
+              <span className="chapter-index" aria-hidden="true">05</span>
               <p className="eyebrow">Por qué elegirnos</p>
               <h2>Experiencia, inventario y criterio técnico para resolver bien desde la primera visita.</h2>
               <p>
@@ -377,15 +391,18 @@ function App() {
               ))}
             </div>
           </section>
+          </div>
         </div>
 
         {bannerStories.slice(2).map((story) => (
           <SectionBanner key={story.eyebrow} {...story} />
         ))}
 
-        <div className="page-shell main-shell">
+        <div className="section-band section-band--carbon">
+          <div className="page-shell main-shell">
           <section className="panel-section location-section reveal" id="contact">
             <div className="location-copy">
+              <span className="chapter-index" aria-hidden="true">06</span>
               <p className="eyebrow">Contáctanos hoy</p>
               <h2>Visitanos en San Juan o envianos tu solicitud de cotizacion antes de llegar.</h2>
               <p>
@@ -420,6 +437,7 @@ function App() {
               />
             </div>
           </section>
+          </div>
         </div>
       </main>
 
@@ -441,6 +459,14 @@ function App() {
             <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
             <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
           </div>
+        </div>
+        <div className="footer-microbar">
+          <span className="flag-squares" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span>Euro Parts Engineering LLC — San Juan, PR</span>
         </div>
       </footer>
     </>
