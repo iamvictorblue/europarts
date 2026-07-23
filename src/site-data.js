@@ -248,6 +248,20 @@ export const tuningHighlights = [
     alt: 'Logo de RacingLine',
     logoMode: true,
   },
+  {
+    title: 'Distribuidores de ECS Tuning',
+    description: 'Piezas de performance y mantenimiento para plataformas europeas.',
+    image: '/ecs-tuning-logo.webp',
+    alt: 'Logo de ECS Tuning',
+    logoMode: true,
+  },
+  {
+    title: 'Distribuidores de Integrated Engineering',
+    description: 'Hardware y componentes performance para proyectos de calle o racing.',
+    image: '/integrated-engineering-logo.webp',
+    alt: 'Logo de Integrated Engineering',
+    logoMode: true,
+  },
 ]
 
 export const maintenanceHighlights = [
