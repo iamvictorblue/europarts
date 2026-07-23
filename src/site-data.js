@@ -262,6 +262,13 @@ export const tuningHighlights = [
     alt: 'Logo de Integrated Engineering',
     logoMode: true,
   },
+  {
+    title: 'Distribuidores de FCP Euro',
+    description: 'Piezas OEM y de performance para plataformas europeas.',
+    image: '/fcp-euro-logo.webp',
+    alt: 'Logo de FCP Euro',
+    logoMode: true,
+  },
 ]
 
 export const maintenanceHighlights = [
