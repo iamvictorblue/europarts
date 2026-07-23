@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { makes, serviceOptions } from './site-data'
 import { isSupabaseConfigured, supabase } from './lib/supabase'
+import WhatsAppFloat, { WhatsAppIcon, whatsappUrl } from './WhatsAppFloat'
 
 const storageKey = 'epe-quote-request-draft'
 const legacyServiceLabels = {
@@ -226,6 +227,22 @@ function WorkOrderPage() {
   const vehicleSummary = [formData.vehicleYear !== 'Anterior a 1985' ? formData.vehicleYear : '', formData.vehicleMake, formData.vehicleModel]
     .filter(Boolean)
     .join(' ')
+
+  const buildWhatsAppMessage = () => {
+    const lines = ['Hola Euro Parts Engineering, quiero solicitar una cotización.']
+    if (formData.clientName.trim()) lines.push(`Nombre: ${formData.clientName.trim()}`)
+    if (formData.clientPhone.trim()) lines.push(`Teléfono: ${formData.clientPhone.trim()}`)
+    if (vehicleSummary) lines.push(`Vehículo: ${vehicleSummary}`)
+    if (formData.odometer) lines.push(`Millaje: ${formData.odometer}`)
+    lines.push(`Trabajo principal: ${formData.serviceType}`)
+    if (selectedServices.length) lines.push(`Servicios: ${selectedServices.join(', ')}`)
+    if (formData.availability) lines.push(`Disponibilidad: ${formData.availability}`)
+    if (formData.budgetRange) lines.push(`Presupuesto: ${formData.budgetRange}`)
+    if (formData.issueDetails.trim()) lines.push(`Detalles: ${formData.issueDetails.trim()}`)
+    if (formData.goals.trim()) lines.push(`Objetivo: ${formData.goals.trim()}`)
+    if (formData.requestItems.trim()) lines.push(`Piezas de interés: ${formData.requestItems.trim()}`)
+    return lines.join('\n')
+  }
 
   return (
     <div className="work-order-view">
@@ -558,12 +575,24 @@ function WorkOrderPage() {
                 <button className="button button-primary" type="submit" disabled={submitState === 'submitting'}>
                   {submitState === 'submitting' ? 'Enviando solicitud...' : 'Enviar solicitud'}
                 </button>
+                <a
+                  className="button button-whatsapp"
+                  href={whatsappUrl(buildWhatsAppMessage())}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <WhatsAppIcon className="button-whatsapp-icon" />
+                  Enviar por WhatsApp
+                </a>
                 <button className="button button-secondary" type="button" onClick={clearDraft}>
                   Limpiar borrador
                 </button>
               </div>
               <div className="submit-copy">
-                <p>Compártelo con el taller para acelerar la evaluacion inicial y la cotizacion.</p>
+                <p>
+                  Envíala al sistema del taller o directo por WhatsApp con el resumen ya escrito —
+                  lo que te sea más cómodo.
+                </p>
                 {submitMessage ? (
                   <p className={`submit-status submit-status-${submitState}`}>{submitMessage}</p>
                 ) : null}
@@ -603,6 +632,8 @@ function WorkOrderPage() {
           </div>
         </aside>
       </main>
+
+      <WhatsAppFloat message="Hola Euro Parts Engineering, quiero cotizar un servicio para mi auto europeo." />
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import WhatsAppFloat, { whatsappUrl } from './WhatsAppFloat'
 import {
   bannerStories,
   featuredServices,
@@ -411,6 +412,13 @@ function App() {
               </p>
               <div className="location-details">
                 <a href="tel:+17872779490">(787) 277-9490</a>
+                <a
+                  href={whatsappUrl('Hola Euro Parts Engineering, quiero hacer una consulta.')}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  WhatsApp (787) 277-9490
+                </a>
                 <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
                 <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
                 <p>lunes a viernes 9:00 a.m - 5:00 p.m</p>
@@ -456,6 +464,13 @@ function App() {
           <div className="footer-contact">
             <p className="eyebrow">Contacto</p>
             <a href="tel:+17872779490">(787) 277-9490</a>
+            <a
+              href={whatsappUrl('Hola Euro Parts Engineering, quiero hacer una consulta.')}
+              target="_blank"
+              rel="noreferrer"
+            >
+              WhatsApp
+            </a>
             <a href="mailto:epe.corp@gmail.com">epe.corp@gmail.com</a>
             <p>1004 Ave Jesús T. Piñero, San Juan, PR 00921</p>
           </div>
@@ -469,6 +484,8 @@ function App() {
           <span>Euro Parts Engineering LLC — San Juan, PR</span>
         </div>
       </footer>
+
+      <WhatsAppFloat message="Hola Euro Parts Engineering, quiero información sobre piezas o servicio para mi auto europeo." />
     </>
   )
 }
