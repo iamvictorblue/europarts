@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { serviceOptions } from './site-data'
+import { makes, serviceOptions } from './site-data'
 import { isSupabaseConfigured, supabase } from './lib/supabase'
 
 const storageKey = 'epe-quote-request-draft'
@@ -23,6 +23,38 @@ const legacyServiceLabels = {
   Garantia: 'Garantía',
 }
 
+const currentYear = new Date().getFullYear()
+const yearOptions = [
+  ...Array.from({ length: currentYear + 2 - 1985 }, (_, index) => String(currentYear + 1 - index)),
+  'Anterior a 1985',
+]
+const makeOptions = [...makes.map((make) => make.name), 'Otra marca europea']
+const mileageOptions = [
+  'Menos de 30,000 millas',
+  '30,000 - 60,000 millas',
+  '60,000 - 100,000 millas',
+  '100,000 - 150,000 millas',
+  'Más de 150,000 millas',
+  'No estoy seguro',
+]
+const availabilityOptions = [
+  'Lo antes posible',
+  'Esta semana',
+  'La próxima semana',
+  'En las próximas 2 semanas',
+  'Flexible',
+]
+const budgetOptions = [
+  'Menos de $500',
+  '$500 - $1,000',
+  '$1,000 - $2,500',
+  '$2,500 - $5,000',
+  'Más de $5,000',
+  'Aún no lo sé',
+]
+const contactOptions = ['Llamada', 'Texto', 'Email']
+const serviceTypeOptions = ['Reparación', 'Mantenimiento', 'Diagnóstico', 'Performance / upgrade', 'Piezas']
+
 function buildInitialState(today) {
   const baseState = {
     selectedServices: ['Diagnóstico'],
@@ -33,7 +65,8 @@ function buildInitialState(today) {
       preferredContact: 'Llamada',
       requestDate: today,
       vehicleYear: '',
-      makeModel: '',
+      vehicleMake: '',
+      vehicleModel: '',
       vin: '',
       odometer: '',
       serviceType: 'Reparación',
@@ -52,15 +85,43 @@ function buildInitialState(today) {
     }
 
     const parsed = JSON.parse(stored)
+    const formData = { ...baseState.formData, ...parsed.formData }
+
+    if (!formData.vehicleMake && !formData.vehicleModel && parsed.formData?.makeModel) {
+      formData.vehicleModel = parsed.formData.makeModel
+    }
+    delete formData.makeModel
+
     return {
       selectedServices: parsed.selectedServices?.length
         ? parsed.selectedServices.map((service) => legacyServiceLabels[service] ?? service)
         : baseState.selectedServices,
-      formData: { ...baseState.formData, ...parsed.formData },
+      formData,
     }
   } catch {
     return baseState
   }
+}
+
+function ChoiceRow({ label, name, options, value, onSelect }) {
+  return (
+    <div className="choice-group">
+      <span className="choice-label">{label}</span>
+      <div className="choice-row" role="group" aria-label={label}>
+        {options.map((option) => (
+          <button
+            key={option}
+            className={`choice-chip ${value === option ? 'active' : ''}`}
+            type="button"
+            aria-pressed={value === option}
+            onClick={() => onSelect(name, option)}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 function WorkOrderPage() {
@@ -90,9 +151,13 @@ function WorkOrderPage() {
     )
   }
 
+  const setFormField = (name, value) => {
+    setFormData((current) => ({ ...current, [name]: value }))
+  }
+
   const updateFormField = (event) => {
     const { name, value } = event.target
-    setFormData((current) => ({ ...current, [name]: value }))
+    setFormField(name, value)
   }
 
   const handleSubmit = async (event) => {
@@ -110,13 +175,13 @@ function WorkOrderPage() {
       client_email: formData.clientEmail.trim(),
       preferred_contact: formData.preferredContact,
       request_date: formData.requestDate || null,
-      vehicle_year: formData.vehicleYear.trim(),
-      make_model: formData.makeModel.trim(),
+      vehicle_year: formData.vehicleYear,
+      make_model: `${formData.vehicleMake} ${formData.vehicleModel.trim()}`.trim(),
       vin: formData.vin.trim(),
-      odometer: formData.odometer.trim(),
+      odometer: formData.odometer,
       service_type: formData.serviceType,
-      availability: formData.availability.trim(),
-      budget_range: formData.budgetRange.trim(),
+      availability: formData.availability,
+      budget_range: formData.budgetRange,
       issue_details: formData.issueDetails.trim(),
       goals: formData.goals.trim(),
       request_items: formData.requestItems.trim(),
@@ -125,9 +190,9 @@ function WorkOrderPage() {
       status: 'nueva',
     }
 
-    if (!payload.client_name || !payload.client_phone || !payload.make_model || !payload.issue_details) {
+    if (!payload.client_name || !payload.client_phone || !formData.vehicleMake || !payload.issue_details) {
       setSubmitState('error')
-      setSubmitMessage('Completa nombre, telefono, marca/modelo y la descripcion del trabajo para enviar la solicitud.')
+      setSubmitMessage('Completa nombre, telefono, la marca del vehiculo y la descripcion del trabajo para enviar la solicitud.')
       return
     }
 
@@ -148,15 +213,19 @@ function WorkOrderPage() {
   }
 
   const clearDraft = () => {
+    window.localStorage.removeItem(storageKey)
     const freshState = buildInitialState(today)
     setSelectedServices(freshState.selectedServices)
     setFormData(freshState.formData)
     setSubmitState('idle')
     setSubmitMessage('')
-    window.localStorage.removeItem(storageKey)
   }
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
+  const vehicleSummary = [formData.vehicleYear !== 'Anterior a 1985' ? formData.vehicleYear : '', formData.vehicleMake, formData.vehicleModel]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <div className="work-order-view">
@@ -212,8 +281,8 @@ function WorkOrderPage() {
             <span className="title-accent">auto europeo.</span>
           </h1>
           <p className="hero-text">
-            Dejamos este formulario más corto para que puedas enviarlo rápido desde el celular y el
-            taller tenga lo esencial para evaluar tu caso.
+            Casi todo se escoge con un toque: solo escribes tu nombre, teléfono, el modelo y qué
+            necesita el carro. Menos de dos minutos desde el celular.
           </p>
         </div>
       </header>
@@ -241,26 +310,49 @@ function WorkOrderPage() {
                   <span className="field-label-text">
                     Nombre <span className="req-mark">*</span>
                   </span>
-                  <input name="clientName" value={formData.clientName} onChange={updateFormField} />
+                  <input
+                    name="clientName"
+                    autoComplete="name"
+                    placeholder="Ej: Juan Pérez"
+                    value={formData.clientName}
+                    onChange={updateFormField}
+                  />
                 </label>
                 <label>
                   <span className="field-label-text">
                     Teléfono <span className="req-mark">*</span>
                   </span>
-                  <input name="clientPhone" value={formData.clientPhone} onChange={updateFormField} />
+                  <input
+                    name="clientPhone"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="787-555-0123"
+                    value={formData.clientPhone}
+                    onChange={updateFormField}
+                  />
                 </label>
+              </div>
+              <div className="field-grid two-up">
                 <label>
-                  Email
-                  <input name="clientEmail" value={formData.clientEmail} onChange={updateFormField} />
+                  <span className="field-label-text">
+                    Email <span className="optional-mark">opcional</span>
+                  </span>
+                  <input
+                    name="clientEmail"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="nombre@email.com"
+                    value={formData.clientEmail}
+                    onChange={updateFormField}
+                  />
                 </label>
-                <label>
-                  Contacto preferido
-                  <select name="preferredContact" value={formData.preferredContact} onChange={updateFormField}>
-                    <option>Llamada</option>
-                    <option>Texto</option>
-                    <option>Email</option>
-                  </select>
-                </label>
+                <ChoiceRow
+                  label="¿Cómo prefieres que te contactemos?"
+                  name="preferredContact"
+                  options={contactOptions}
+                  value={formData.preferredContact}
+                  onSelect={setFormField}
+                />
               </div>
             </div>
 
@@ -273,22 +365,48 @@ function WorkOrderPage() {
               </h3>
               <div className="field-grid two-up">
                 <label>
-                  Año
-                  <input name="vehicleYear" value={formData.vehicleYear} onChange={updateFormField} />
-                </label>
-                <label>
                   <span className="field-label-text">
-                    Marca y modelo <span className="req-mark">*</span>
+                    Marca <span className="req-mark">*</span>
                   </span>
-                  <input name="makeModel" value={formData.makeModel} onChange={updateFormField} />
+                  <select name="vehicleMake" value={formData.vehicleMake} onChange={updateFormField}>
+                    <option value="" disabled>
+                      Selecciona la marca
+                    </option>
+                    {makeOptions.map((make) => (
+                      <option key={make}>{make}</option>
+                    ))}
+                  </select>
                 </label>
                 <label>
-                  VIN
-                  <input name="vin" value={formData.vin} onChange={updateFormField} />
+                  Modelo
+                  <input
+                    name="vehicleModel"
+                    placeholder="Ej: Golf GTI, 911 Carrera, C300"
+                    value={formData.vehicleModel}
+                    onChange={updateFormField}
+                  />
+                </label>
+                <label>
+                  Año
+                  <select name="vehicleYear" value={formData.vehicleYear} onChange={updateFormField}>
+                    <option value="" disabled>
+                      Selecciona el año
+                    </option>
+                    {yearOptions.map((year) => (
+                      <option key={year}>{year}</option>
+                    ))}
+                  </select>
                 </label>
                 <label>
                   Millaje
-                  <input name="odometer" value={formData.odometer} onChange={updateFormField} />
+                  <select name="odometer" value={formData.odometer} onChange={updateFormField}>
+                    <option value="" disabled>
+                      Selecciona el millaje
+                    </option>
+                    {mileageOptions.map((range) => (
+                      <option key={range}>{range}</option>
+                    ))}
+                  </select>
                 </label>
               </div>
             </div>
@@ -300,28 +418,35 @@ function WorkOrderPage() {
                 </span>
                 Tipo de solicitud
               </h3>
+              <ChoiceRow
+                label="¿Qué necesitas principalmente?"
+                name="serviceType"
+                options={serviceTypeOptions}
+                value={formData.serviceType}
+                onSelect={setFormField}
+              />
               <div className="field-grid two-up">
                 <label>
-                  Trabajo principal
-                  <select name="serviceType" value={formData.serviceType} onChange={updateFormField}>
-                    <option>Reparación</option>
-                    <option>Mantenimiento</option>
-                    <option>Diagnóstico</option>
-                    <option>Performance / upgrade</option>
-                    <option>Piezas</option>
+                  ¿Cuándo puedes traer el carro?
+                  <select name="availability" value={formData.availability} onChange={updateFormField}>
+                    <option value="" disabled>
+                      Selecciona tu disponibilidad
+                    </option>
+                    {availabilityOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
                   </select>
                 </label>
                 <label>
-                  Disponibilidad
-                  <input name="availability" value={formData.availability} onChange={updateFormField} />
-                </label>
-                <label>
                   Presupuesto aproximado
-                  <input name="budgetRange" value={formData.budgetRange} onChange={updateFormField} />
-                </label>
-                <label>
-                  Fecha de solicitud
-                  <input type="date" name="requestDate" value={formData.requestDate} onChange={updateFormField} />
+                  <select name="budgetRange" value={formData.budgetRange} onChange={updateFormField}>
+                    <option value="" disabled>
+                      Selecciona un rango
+                    </option>
+                    {budgetOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
+                  </select>
                 </label>
               </div>
 
@@ -348,29 +473,74 @@ function WorkOrderPage() {
                 <span className="form-step-index" aria-hidden="true">
                   04
                 </span>
-                Cuéntanos lo necesario
+                Cuéntanos qué pasa
               </h3>
               <label>
                 <span className="field-label-text">
-                  Síntomas, servicio o falla <span className="req-mark">*</span>
+                  Describe el problema o lo que necesitas <span className="req-mark">*</span>
                 </span>
-                <textarea name="issueDetails" value={formData.issueDetails} onChange={updateFormField} rows="5" />
+                <textarea
+                  name="issueDetails"
+                  rows="5"
+                  placeholder="Ej: El carro pierde fuerza al acelerar y la luz del motor prende desde la semana pasada."
+                  value={formData.issueDetails}
+                  onChange={updateFormField}
+                />
               </label>
-              <label>
-                Objetivo del proyecto o upgrade
-                <textarea name="goals" value={formData.goals} onChange={updateFormField} rows="4" />
-              </label>
-              <label>
-                Piezas o servicios que te interesan
-                <textarea name="requestItems" value={formData.requestItems} onChange={updateFormField} rows="4" />
-              </label>
+
+              <details className="optional-details">
+                <summary>
+                  <span className="optional-details-title">Detalles opcionales</span>
+                  <span className="optional-details-hint">VIN, objetivo del proyecto, piezas específicas</span>
+                </summary>
+                <div className="optional-details-fields">
+                  <label>
+                    VIN
+                    <input
+                      name="vin"
+                      maxLength="17"
+                      placeholder="17 caracteres (opcional, agiliza la búsqueda de piezas)"
+                      value={formData.vin}
+                      onChange={updateFormField}
+                    />
+                  </label>
+                  <label>
+                    Objetivo del proyecto o upgrade
+                    <textarea
+                      name="goals"
+                      rows="3"
+                      placeholder="Ej: Busco stage 1 con piezas APR y mejor respuesta del acelerador."
+                      value={formData.goals}
+                      onChange={updateFormField}
+                    />
+                  </label>
+                  <label>
+                    Piezas o servicios que te interesan
+                    <textarea
+                      name="requestItems"
+                      rows="3"
+                      placeholder="Ej: Frenos delanteros, aceite Liqui Moly, filtro de aire."
+                      value={formData.requestItems}
+                      onChange={updateFormField}
+                    />
+                  </label>
+                </div>
+              </details>
             </div>
 
             <div className="form-footer form-footer-single">
               <aside className="totals-card">
                 <div className="quote-summary-row">
-                  <span>Tipo de solicitud</span>
+                  <span>Vehículo</span>
+                  <strong>{vehicleSummary || 'Sin especificar'}</strong>
+                </div>
+                <div className="quote-summary-row">
+                  <span>Trabajo principal</span>
                   <strong>{formData.serviceType}</strong>
+                </div>
+                <div className="quote-summary-row">
+                  <span>Disponibilidad</span>
+                  <strong>{formData.availability || 'Sin especificar'}</strong>
                 </div>
                 <div className="quote-summary-row">
                   <span>Servicios marcados</span>
