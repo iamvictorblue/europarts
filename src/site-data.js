@@ -213,7 +213,7 @@ export const bannerStories = [
     {
     eyebrow: 'Logística & Red de Inventario EPE',
     title: 'Atención profesional y respuesta rápida para el mantenimiento de tu Europeo.',
-    description: 'Mantenemos en la tienda un inventario continuo de fluidos y artículos esenciales de mantenimiento (aditivos, coolant, aceite y filtros). El resto de nuestras piezas se gestionan a través de almacenes locales y fuera de la isla. Contamos con entregas a nuestra tienda con 3 viajes pautados diarios, en rutas que salen del almacén alrededor de las 10:00 am, 12:30 pm y 2:30 pm durante días laborables. Para averiguar disponibilidad de inventario, llámanos con anticipación para solicitar tus piezas en la isla, prepararlas y tenértelas listas al momento de tu visita.',
+    description: 'Mantenemos en la tienda un inventario continuo de fluidos y artículos esenciales de mantenimiento (aditivos, coolant, aceite y filtros). El resto de nuestras piezas se gestionan a través de almacenes locales y fuera de la isla. Contamos con entregas a nuestra tienda con 3 viajes pautados diarios, en rutas que salen del almacén alrededor de las 10am, 12pm y 2pm durante días laborables. Para averiguar disponibilidad de inventario, llámanos con anticipación para solicitar tus piezas en la isla, prepararlas y tenértelas listas al momento de tu visita.',
     variant: 'red',
     images: shopGallery.slice(4, 8),
   },
