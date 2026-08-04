@@ -210,13 +210,13 @@ export const bannerStories = [
     variant: 'blue',
     images: shopGallery.slice(0, 4),
   },
-  {
-      {
+    {
     eyebrow: 'Logística & Red de Inventario EPE',
     title: 'Atención profesional y respuesta rápida para el mantenimiento de tu Europeo.',
     description: 'Mantenemos en tienda stock continuo de fluidos y mantenimiento esencial (aceite, aditivos, coolant y filtros). El resto de nuestras piezas se gestionan a través de almacenes locales y fuera de la isla. Contamos con entregas a tienda a las 10:00 am, 12:30 pm y 2:30 pm. Para averiguar disponibilidad, llámanos con anticipación para solicitar tus piezas en la isla, prepararlas y tenértelas listas al momento de tu visita.',
     variant: 'red',
     images: shopGallery.slice(4, 8),
+  },
   },
   {
     eyebrow: 'Performance real',
