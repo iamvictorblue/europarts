@@ -217,8 +217,8 @@ export const bannerStories = [
     variant: 'red',
     images: shopGallery.slice(4, 8),
   },
-  {
-    eyebrow: 'Performance real',
+    {
+      eyebrow: 'Performance real',
     title: 'Motores, preparaciones y upgrades respaldados por experiencia en proyectos performance.',
     description: 'EPE integra piezas, instalación y soporte para clientes que buscan mejor respuesta, potencia y atención experta.',
     variant: 'orange',
